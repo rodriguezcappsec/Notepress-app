@@ -51,16 +51,20 @@ class NavBar extends Component {
       <React.Fragment>
         <AppBar position="absolute" className={classes.appBar} color="primary">
           <Toolbar>
-            <Typography classes={classes.flex} variant="title" color="inherit" noWrap>
+            <Typography
+              style={{ flex: 1 }}
+              variant="title"
+              color="inherit"
+              noWrap
+            >
               Notepress
             </Typography>
-            <div >
+            <div>
               <IconButton
                 aria-owns={open ? "menu-appbar" : null}
                 aria-haspopup="true"
                 onClick={this.handleMenu}
                 color="inherit"
-                
               >
                 <AccountCircle />
               </IconButton>
