@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 
 ReactDOM.render(
   <BrowserRouter>
-    <App />
+    <App isLoggedIn={true} />
   </BrowserRouter>,
   document.getElementById("root")
 );

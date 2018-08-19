@@ -24,19 +24,24 @@ const styles = theme => ({
 class App extends Component {
   constructor(props) {
     super(props);
+    this.state = { isLoggedIn: this.props.isLoggedIn };
   }
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <NavBar />
-        <SideMenu />
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Switch>
-            <Route path="/home" />
-          </Switch>
-        </main>
+        {this.state.isLoggedIn && (
+          <React.Fragment>
+            <NavBar />
+            <SideMenu />
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              <Switch>
+                <Route path="/home" />
+              </Switch>
+            </main>
+          </React.Fragment>
+        )}
       </div>
     );
   }
