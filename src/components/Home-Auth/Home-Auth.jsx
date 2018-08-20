@@ -12,6 +12,10 @@ import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
 import Axios from "axios";
 import apiURL from "../../apiConfig.js";
+import App from "../../App.js";
+import { BrowserRouter } from "react-router-dom";
+import ReactDOM from "react-dom";
+import Grow from "@material-ui/core/Grow";
 const styles = theme => ({
   margin: {
     margin: theme.spacing.unit
@@ -32,7 +36,10 @@ class HomeAuth extends Component {
     super(props);
     this.state = {
       api: apiURL,
-      isLogged: false,
+      loggedUser: {
+        user: "",
+        isLogged: false
+      },
       account: {
         email: "",
         password: ""
@@ -48,6 +55,10 @@ class HomeAuth extends Component {
       }
     })
       .then(user => {
+        const loggedUser = { ...this.state.loggedUser };
+        loggedUser.user = user.data;
+        loggedUser.isLogged = true;
+        this.setState({ loggedUser });
         console.log(user.data);
       })
       .catch(exe => {
@@ -59,7 +70,19 @@ class HomeAuth extends Component {
     account[input.name] = input.value;
     this.setState({ account: account });
   };
-  render() {
+  componentDidUpdate = () => {
+    if (this.state.loggedUser.isLogged)
+      return ReactDOM.render(
+        <Grow in={this.state.loggedUser.isLogged} >
+          <BrowserRouter>
+            <App isLoggedIn={this.state.loggedUser.isLogged} />
+          </BrowserRouter>
+        </Grow>,
+        document.getElementById("root")
+      );
+  };
+  handleAuthenticationState = () => {
+    // if (!this.state.loggedUser.isLogged) {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
@@ -149,6 +172,10 @@ class HomeAuth extends Component {
         </Card>
       </div>
     );
+    // }
+  };
+  render() {
+    return this.handleAuthenticationState();
   }
 }
 

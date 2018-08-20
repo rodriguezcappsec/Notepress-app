@@ -33,22 +33,22 @@ class App extends Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        {this.state.isLoggedIn && (
-          <React.Fragment>
-            <NavBar isLogged={this.state.isLoggedIn} />
-            <SideMenu />
-            <main className={classes.content}>
-              <div className={classes.toolbar} />
-              <Switch>
-                <Route path="/home" />
-              </Switch>
-            </main>
-          </React.Fragment>
-        )}
+        <React.Fragment>
+          <NavBar isLogged={this.state.isLoggedIn} />
+          <SideMenu />
+          <main className={classes.content}>
+            <div className={classes.toolbar} />
+            <Switch>
+              <Route path="/home" />
+            </Switch>
+          </main>
+        </React.Fragment>
       </div>
     );
   }
 }
+
+
 App.propTypes = {
   classes: PropTypes.object.isRequired
 };
