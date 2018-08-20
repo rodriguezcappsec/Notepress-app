@@ -43,7 +43,11 @@ const styles = theme => ({
 class NotesGrid extends Component {
   constructor(props) {
     super(props);
-    this.state = { api: apiURL, user: this.props.user.user, allNotes: [] };
+    this.state = {
+      api: apiURL,
+      user: this.props.user.user,
+      allNotes: []
+    };
   }
   handleNoteRequest = () => {
     return Axios.get(`${this.state.api}/notes`, {
@@ -58,15 +62,14 @@ class NotesGrid extends Component {
         console.log(exe);
       });
   };
-  deleteNote = ({ currentTarget }) => {
-    console.log(`${this.state.api}/notes/${currentTarget.id}`);
+  handleDeleteNote = ({ currentTarget }) => {
     Axios.delete(`${this.state.api}/notes/${currentTarget.id}`, {
       headers: {
         Authorization: "Bearer " + this.state.user.token
       }
     })
       .then(deletedNote => {
-        console.log(deletedNote);
+        console.log(deletedNote.data);
       })
       .catch(exe => {
         console.log(exe);
@@ -98,38 +101,45 @@ class NotesGrid extends Component {
     );
   }
   renderNotes = () => {
-    return this.state.allNotes.map((note, index) => (
-      <Card
-        className={this.props.classes.card}
-        key={index}
-        style={{ margin: "50px 20px 0 0" }}
-      >
-        <CardContent>
-          <Typography gutterBottom variant="headline" component="h2">
-            {note.title}
-          </Typography>
-          <Typography component="p">{note.note}</Typography>
-        </CardContent>
-        <CardActions>
-          <Button
-            className={this.props.classes.button}
-            size="small"
-            color="primary"
-          >
-            Edit
-          </Button>
-          <Button
-            className={this.props.classes.button}
-            size="small"
-            color="secondary"
-            id={note._id}
-            onClick={this.deleteNote}
-          >
-            Delete
-          </Button>
-        </CardActions>
-      </Card>
-    ));
+    return this.state.allNotes.length === 0 ? (
+      <h3>No data to display</h3>
+    ) : (
+      this.state.allNotes.map((note, index) => (
+        <Card
+          className={this.props.classes.card}
+          key={index}
+          style={{ margin: "50px 20px 0 0" }}
+        >
+          <CardContent>
+            <Typography gutterBottom variant="headline" component="h2">
+              {note.title}
+            </Typography>
+            <Typography component="p">{note.note}</Typography>
+          </CardContent>
+          <CardActions>
+            <Button
+              className={this.props.classes.button}
+              size="small"
+              color="primary"
+              variant="contained"
+              id={note._id}
+            >
+              Edit
+            </Button>
+            <Button
+              className={this.props.classes.button}
+              size="small"
+              variant="contained"
+              color="secondary"
+              id={note._id}
+              onClick={this.handleDeleteNote}
+            >
+              Delete
+            </Button>
+          </CardActions>
+        </Card>
+      ))
+    );
   };
 }
 NotesGrid.propTypes = {
