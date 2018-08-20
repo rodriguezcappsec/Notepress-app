@@ -65,6 +65,9 @@ class App extends Component {
               <Switch>
                 <Route path="/home" />
               </Switch>
+              <p>hello
+
+              </p>
             </main>
           </Slide>
         </React.Fragment>
