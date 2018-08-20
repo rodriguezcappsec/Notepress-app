@@ -22,18 +22,29 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: this.props.isLoggedIn,
+      checked: true
+    };
+  }
   render() {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-        <NavBar />
-        <SideMenu />
-        <main className={classes.content}>
-          <div className={classes.toolbar} />
-          <Switch>
-            <Route path="/home" />
-          </Switch>
-        </main>
+        {this.state.isLoggedIn && (
+          <React.Fragment>
+            <NavBar isLogged={this.state.isLoggedIn} />
+            <SideMenu />
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              <Switch>
+                <Route path="/home" />
+              </Switch>
+            </main>
+          </React.Fragment>
+        )}
       </div>
     );
   }
