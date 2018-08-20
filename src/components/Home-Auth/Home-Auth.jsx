@@ -10,6 +10,8 @@ import Card from "@material-ui/core/Card";
 import CardHeader from "@material-ui/core/CardHeader";
 import CardActions from "@material-ui/core/CardActions";
 import Button from "@material-ui/core/Button";
+import Axios from "axios";
+import apiURL from "../../apiConfig.js";
 const styles = theme => ({
   margin: {
     margin: theme.spacing.unit
@@ -26,6 +28,37 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar
 });
 class HomeAuth extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      api: apiURL,
+      isLogged: false,
+      account: {
+        email: "",
+        password: ""
+      }
+    };
+  }
+  loginRequest = onSubmit => {
+    onSubmit.preventDefault();
+    Axios.post(`${this.state.api}/sign-in`, {
+      credentials: {
+        email: this.state.account.email,
+        password: this.state.account.password
+      }
+    })
+      .then(user => {
+        console.log(user.data);
+      })
+      .catch(exe => {
+        console.log(exe);
+      });
+  };
+  handleFormValues = ({ currentTarget: input }) => {
+    const account = { ...this.state.account };
+    account[input.name] = input.value;
+    this.setState({ account: account });
+  };
   render() {
     const { classes } = this.props;
     return (
@@ -44,7 +77,7 @@ class HomeAuth extends Component {
           }}
         >
           <CardHeader title="NotePress" subheader="LogIn" />
-          <form>
+          <form onSubmit={this.loginRequest} id="LoginForm">
             <Grid
               container
               spacing={8}
@@ -60,6 +93,8 @@ class HomeAuth extends Component {
                   type="email"
                   id="input-with-icon-grid"
                   label="Email"
+                  name="email"
+                  onChange={this.handleFormValues}
                 />
               </Grid>
             </Grid>
@@ -75,16 +110,18 @@ class HomeAuth extends Component {
               </Grid>
               <Grid item>
                 <TextField
+                  autoFocus
                   type="password"
                   id="input-with-icon-grid"
                   label="Password"
+                  name="password"
+                  onChange={this.handleFormValues}
                 />
               </Grid>
             </Grid>
             <Grid
               container
               spacing={8}
-              md={10}
               alignItems="flex-end"
               justify="center"
               style={{ padding: "10px" }}
