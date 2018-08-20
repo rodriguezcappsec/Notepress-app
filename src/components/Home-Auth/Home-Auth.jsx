@@ -15,6 +15,7 @@ import apiURL from "../../apiConfig.js";
 import App from "../../App.js";
 import { BrowserRouter } from "react-router-dom";
 import Slide from "@material-ui/core/Slide";
+import ModalAlert from "../../modals/ModalAlert.jsx";
 const styles = theme => ({
   margin: {
     margin: theme.spacing.unit
@@ -58,7 +59,6 @@ class HomeAuth extends Component {
         loggedUser.user = user.data;
         loggedUser.isLogged = true;
         this.setState({ loggedUser });
-        console.log(user.data);
       })
       .catch(exe => {
         console.log(exe);
@@ -166,10 +166,17 @@ class HomeAuth extends Component {
     return (
       <React.Fragment>
         <BrowserRouter>
-          {/* <Slide direction="up" mountOnEnter unmountOnExit in={true}> */}
-          <App isLoggedIn={this.state.loggedUser.isLogged} />
-          {/* </Slide> */}
+          <App
+            isLoggedIn={this.state.loggedUser.isLogged}
+            loggedUser={this.state.loggedUser.user}
+          />
         </BrowserRouter>
+        <ModalAlert
+          open={true}
+          modalTitle="Welcome!"
+          modalContent={this.state.loggedUser.user.user.name}
+        />
+        );
       </React.Fragment>
     );
   };

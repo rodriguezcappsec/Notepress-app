@@ -29,10 +29,11 @@ const styles = theme => ({
 class SideMenu extends Component {
   render() {
     const { classes } = this.props;
-    return <React.Fragment>
+    return (
+      <React.Fragment>
         <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
           <div className={classes.toolbar} />
-          <Link to="/home" style={{ textDecoration: "none" }}>
+          <Link  to="/home" style={{ textDecoration: "none" }}>
             <ListItem button>
               <ListItemIcon>
                 <Home />
@@ -58,7 +59,8 @@ class SideMenu extends Component {
             </ListItem>
           </Link>
         </Drawer>
-      </React.Fragment>;
+      </React.Fragment>
+    );
   }
 }
 SideMenu.propTypes = {
