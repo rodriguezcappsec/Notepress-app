@@ -10,6 +10,8 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import apiURL from "../../apiConfig.js";
 import Axios from "axios";
+import ModalAlert from "../../modals/ModalAlert.jsx";
+import { Modal } from "@material-ui/core";
 
 const styles = theme => ({
   root: {
@@ -32,19 +34,21 @@ const styles = theme => ({
   media: {
     // ⚠️ object-fit is not supported by IE11.
     objectFit: "cover"
+  },
+  button: {
+    margin: theme.spacing.unit
   }
 });
 
 class NotesGrid extends Component {
   constructor(props) {
     super(props);
-    this.state = { api: apiURL, user: this.props.user, allNotes: [] };
+    this.state = { api: apiURL, user: this.props.user.user, allNotes: [] };
   }
-
-  componentDidMount() {
-    Axios.get(`${this.state.api}/notes`, {
+  handleNoteRequest = () => {
+    return Axios.get(`${this.state.api}/notes`, {
       headers: {
-        Authorization: "Bearer " + this.state.user.user.token
+        Authorization: "Bearer " + this.state.user.token
       }
     })
       .then(notes => {
@@ -53,7 +57,28 @@ class NotesGrid extends Component {
       .catch(exe => {
         console.log(exe);
       });
+  };
+  deleteNote = ({ currentTarget }) => {
+    console.log(`${this.state.api}/notes/${currentTarget.id}`);
+    Axios.delete(`${this.state.api}/notes/${currentTarget.id}`, {
+      headers: {
+        Authorization: "Bearer " + this.state.user.token
+      }
+    })
+      .then(deletedNote => {
+        console.log(deletedNote);
+      })
+      .catch(exe => {
+        console.log(exe);
+      });
+  };
+  componentDidMount() {
+    this.handleNoteRequest();
   }
+  componentDidUpdate() {
+    this.handleNoteRequest();
+  }
+
   render() {
     const { classes } = this.props;
 
@@ -66,33 +91,46 @@ class NotesGrid extends Component {
             justify="center"
             spacing={40}
           >
-            {this.state.allNotes.map((note, index) => (
-              <Card
-                className={classes.card}
-                key={index}
-                style={{ margin: "50px 20px 0 0" }}
-              >
-                <CardContent>
-                  <Typography gutterBottom variant="headline" component="h2">
-                    {note.title}
-                  </Typography>
-                  <Typography component="p">{note.note}</Typography>
-                </CardContent>
-                <CardActions>
-                  <Button size="small" color="primary">
-                    Edit
-                  </Button>
-                  <Button size="small" color="primary">
-                    Delete
-                  </Button>
-                </CardActions>
-              </Card>
-            ))}
+            {this.renderNotes()}
           </Grid>
         </Grid>
       </Grid>
     );
   }
+  renderNotes = () => {
+    return this.state.allNotes.map((note, index) => (
+      <Card
+        className={this.props.classes.card}
+        key={index}
+        style={{ margin: "50px 20px 0 0" }}
+      >
+        <CardContent>
+          <Typography gutterBottom variant="headline" component="h2">
+            {note.title}
+          </Typography>
+          <Typography component="p">{note.note}</Typography>
+        </CardContent>
+        <CardActions>
+          <Button
+            className={this.props.classes.button}
+            size="small"
+            color="primary"
+          >
+            Edit
+          </Button>
+          <Button
+            className={this.props.classes.button}
+            size="small"
+            color="secondary"
+            id={note._id}
+            onClick={this.deleteNote}
+          >
+            Delete
+          </Button>
+        </CardActions>
+      </Card>
+    ));
+  };
 }
 NotesGrid.propTypes = {
   classes: PropTypes.object.isRequired
