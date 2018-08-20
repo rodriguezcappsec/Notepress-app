@@ -24,7 +24,10 @@ const styles = theme => ({
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { isLoggedIn: this.props.isLoggedIn };
+    this.state = {
+      isLoggedIn: this.props.isLoggedIn,
+      checked: true
+    };
   }
   render() {
     const { classes } = this.props;
@@ -32,7 +35,7 @@ class App extends Component {
       <div className={classes.root}>
         {this.state.isLoggedIn && (
           <React.Fragment>
-            <NavBar />
+            <NavBar isLogged={this.state.isLoggedIn} />
             <SideMenu />
             <main className={classes.content}>
               <div className={classes.toolbar} />

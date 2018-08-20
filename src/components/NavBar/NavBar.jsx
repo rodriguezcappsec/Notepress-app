@@ -31,10 +31,7 @@ const styles = theme => ({
 class NavBar extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      auth: true,
-      anchorEl: null
-    };
+    this.state = { anchorEl: null, isLogged: this.props.isLogged };
   }
   handleMenu = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -59,33 +56,35 @@ class NavBar extends Component {
             >
               Notepress
             </Typography>
-            <div>
-              <IconButton
-                aria-owns={open ? "menu-appbar" : null}
-                aria-haspopup="true"
-                onClick={this.handleMenu}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-              <Menu
-                id="menu-appbar"
-                anchorEl={anchorEl}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right"
-                }}
-                open={open}
-                onClose={this.handleClose}
-              >
-                <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                <MenuItem onClick={this.handleClose}>My account</MenuItem>
-              </Menu>
-            </div>
+            {this.state.isLogged && (
+              <div>
+                <IconButton
+                  aria-owns={open ? "menu-appbar" : null}
+                  aria-haspopup="true"
+                  onClick={this.handleMenu}
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right"
+                  }}
+                  open={open}
+                  onClose={this.handleClose}
+                >
+                  <MenuItem onClick={this.handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                </Menu>
+              </div>
+            )}
           </Toolbar>
         </AppBar>
       </React.Fragment>
