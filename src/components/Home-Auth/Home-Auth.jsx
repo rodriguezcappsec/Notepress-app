@@ -15,9 +15,7 @@ import apiURL from "../../apiConfig.js";
 import App from "../../App.js";
 import { BrowserRouter } from "react-router-dom";
 import ReactDOM from "react-dom";
-import Grow from "@material-ui/core/Grow";
 import Slide from "@material-ui/core/Slide";
-import Zoom from "@material-ui/core/Zoom";
 const styles = theme => ({
   margin: {
     margin: theme.spacing.unit
