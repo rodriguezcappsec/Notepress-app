@@ -35,15 +35,7 @@ class App extends Component {
     return (
       <div className={classes.root}>
         <React.Fragment>
-          <Slide
-            direction="down"
-            mountOnEnter
-            unmountOnExit
-            in={true}
-            style={{ transitionDelay: true ? 500 : 0 }}
-          >
-            <NavBar isLogged={this.state.isLoggedIn} />
-          </Slide>
+          <NavBar isLogged={this.state.isLoggedIn} />
           <Slide
             direction="right"
             mountOnEnter
@@ -65,9 +57,7 @@ class App extends Component {
               <Switch>
                 <Route path="/home" />
               </Switch>
-              <p>hello
-
-              </p>
+              <p>hello</p>
             </main>
           </Slide>
         </React.Fragment>
