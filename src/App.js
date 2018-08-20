@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar/NavBar.jsx";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import SideMenu from "./components/SideMenu/SideMenu.jsx";
+import Slide from "@material-ui/core/Slide";
 
 const styles = theme => ({
   root: {
@@ -34,20 +35,43 @@ class App extends Component {
     return (
       <div className={classes.root}>
         <React.Fragment>
-          <NavBar isLogged={this.state.isLoggedIn} />
-          <SideMenu />
-          <main className={classes.content}>
-            <div className={classes.toolbar} />
-            <Switch>
-              <Route path="/home" />
-            </Switch>
-          </main>
+          <Slide
+            direction="down"
+            mountOnEnter
+            unmountOnExit
+            in={true}
+            style={{ transitionDelay: true ? 500 : 0 }}
+          >
+            <NavBar isLogged={this.state.isLoggedIn} />
+          </Slide>
+          <Slide
+            direction="right"
+            mountOnEnter
+            unmountOnExit
+            in={true}
+            style={{ transitionDelay: true ? 800 : 0 }}
+          >
+            <SideMenu />
+          </Slide>
+          <Slide
+            direction="up"
+            mountOnEnter
+            unmountOnExit
+            in={true}
+            style={{ transitionDelay: true ? 1000 : 0 }}
+          >
+            <main className={classes.content}>
+              <div className={classes.toolbar} />
+              <Switch>
+                <Route path="/home" />
+              </Switch>
+            </main>
+          </Slide>
         </React.Fragment>
       </div>
     );
   }
 }
-
 
 App.propTypes = {
   classes: PropTypes.object.isRequired
