@@ -14,7 +14,6 @@ import Axios from "axios";
 import apiURL from "../../apiConfig.js";
 import App from "../../App.js";
 import { BrowserRouter } from "react-router-dom";
-import ReactDOM from "react-dom";
 import Slide from "@material-ui/core/Slide";
 const styles = theme => ({
   margin: {
@@ -70,111 +69,109 @@ class HomeAuth extends Component {
     account[input.name] = input.value;
     this.setState({ account: account });
   };
-  componentDidUpdate = () => {
-    if (this.state.loggedUser.isLogged)
-      return ReactDOM.render(
+  handleAuthenticationState = () => {
+    if (!this.state.loggedUser.isLogged) {
+      const { classes } = this.props;
+      return (
+        <div className={classes.root}>
+          <div>
+            <NavBar />
+          </div>
+          <Slide direction="down" in={true} mountOnEnter unmountOnExit>
+            <Card
+              className={classes.card}
+              style={{
+                position: "absolute",
+                width: "500px",
+                height: "350px",
+                top: "30%",
+                left: "40%"
+              }}
+            >
+              <CardHeader title="NotePress" subheader="LogIn" />
+              <form onSubmit={this.loginRequest} id="LoginForm">
+                <Grid
+                  container
+                  spacing={8}
+                  alignItems="flex-end"
+                  justify="center"
+                  style={{ padding: "10px" }}
+                >
+                  <Grid item>
+                    <Email />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      type="email"
+                      id="input-with-icon-grid"
+                      label="Email"
+                      name="email"
+                      onChange={this.handleFormValues}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  spacing={8}
+                  alignItems="flex-end"
+                  justify="center"
+                  style={{ padding: "10px" }}
+                >
+                  <Grid item>
+                    <Password />
+                  </Grid>
+                  <Grid item>
+                    <TextField
+                      autoFocus
+                      type="password"
+                      id="input-with-icon-grid"
+                      label="Password"
+                      name="password"
+                      onChange={this.handleFormValues}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  spacing={8}
+                  alignItems="flex-end"
+                  justify="center"
+                  style={{ padding: "10px" }}
+                >
+                  <Grid item style={{ paddingLeft: "60px" }}>
+                    <CardActions>
+                      <Button type="submit" variant="contained" color="primary">
+                        LogIn
+                      </Button>
+                    </CardActions>
+                  </Grid>
+                  <Grid item>
+                    <CardActions>
+                      <Button
+                        style={{ float: "right" }}
+                        variant="contained"
+                        color="secondary"
+                      >
+                        Register
+                      </Button>
+                    </CardActions>
+                  </Grid>
+                </Grid>
+              </form>
+            </Card>
+          </Slide>
+        </div>
+      );
+    }
+    return (
+      <React.Fragment>
         <BrowserRouter>
           {/* <Slide direction="up" mountOnEnter unmountOnExit in={true}> */}
-            <App isLoggedIn={this.state.loggedUser.isLogged} />
+          <App isLoggedIn={this.state.loggedUser.isLogged} />
           {/* </Slide> */}
-        </BrowserRouter>,
-        document.getElementById("root")
-      );
-  };
-  handleAuthenticationState = () => {
-    // if (!this.state.loggedUser.isLogged) {
-    const { classes } = this.props;
-    return (
-      <div className={classes.root}>
-        <div>
-          <NavBar />
-        </div>
-        <Slide direction="down" in={true} mountOnEnter unmountOnExit>
-          <Card
-            className={classes.card}
-            style={{
-              position: "absolute",
-              width: "500px",
-              height: "350px",
-              top: "30%",
-              left: "40%"
-            }}
-          >
-            <CardHeader title="NotePress" subheader="LogIn" />
-            <form onSubmit={this.loginRequest} id="LoginForm">
-              <Grid
-                container
-                spacing={8}
-                alignItems="flex-end"
-                justify="center"
-                style={{ padding: "10px" }}
-              >
-                <Grid item>
-                  <Email />
-                </Grid>
-                <Grid item>
-                  <TextField
-                    type="email"
-                    id="input-with-icon-grid"
-                    label="Email"
-                    name="email"
-                    onChange={this.handleFormValues}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                spacing={8}
-                alignItems="flex-end"
-                justify="center"
-                style={{ padding: "10px" }}
-              >
-                <Grid item>
-                  <Password />
-                </Grid>
-                <Grid item>
-                  <TextField
-                    autoFocus
-                    type="password"
-                    id="input-with-icon-grid"
-                    label="Password"
-                    name="password"
-                    onChange={this.handleFormValues}
-                  />
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                spacing={8}
-                alignItems="flex-end"
-                justify="center"
-                style={{ padding: "10px" }}
-              >
-                <Grid item style={{ paddingLeft: "60px" }}>
-                  <CardActions>
-                    <Button type="submit" variant="contained" color="primary">
-                      LogIn
-                    </Button>
-                  </CardActions>
-                </Grid>
-                <Grid item>
-                  <CardActions>
-                    <Button
-                      style={{ float: "right" }}
-                      variant="contained"
-                      color="secondary"
-                    >
-                      Register
-                    </Button>
-                  </CardActions>
-                </Grid>
-              </Grid>
-            </form>
-          </Card>
-        </Slide>
-      </div>
+        </BrowserRouter>
+      </React.Fragment>
     );
-    // }
   };
   render() {
     return this.handleAuthenticationState();
