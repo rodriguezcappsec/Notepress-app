@@ -1,10 +1,11 @@
 import React, { Component } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, Redirect } from "react-router-dom";
 import NavBar from "./components/NavBar/NavBar.jsx";
 import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import SideMenu from "./components/SideMenu/SideMenu.jsx";
 import Slide from "@material-ui/core/Slide";
+import NotesGrid from "./components/NotesGrid/NotesGrid.jsx";
 
 const styles = theme => ({
   root: {
@@ -27,9 +28,12 @@ class App extends Component {
     super(props);
     this.state = {
       isLoggedIn: this.props.isLoggedIn,
-      checked: true
+      checked: true,
+      allNotes: [],
+      user: this.props.loggedUser
     };
   }
+
   render() {
     const { classes } = this.props;
     return (
@@ -41,7 +45,7 @@ class App extends Component {
             mountOnEnter
             unmountOnExit
             in={true}
-            style={{ transitionDelay: true ? 800 : 0 }}
+            style={{ transitionDelay: true ? 500 : 0 }}
           >
             <SideMenu />
           </Slide>
@@ -50,14 +54,20 @@ class App extends Component {
             mountOnEnter
             unmountOnExit
             in={true}
-            style={{ transitionDelay: true ? 1000 : 0 }}
+            style={{ transitionDelay: true ? 700 : 0 }}
           >
             <main className={classes.content}>
               <div className={classes.toolbar} />
               <Switch>
-                <Route path="/home" />
+                <Route
+                  exact
+                  path="/home"
+                  render={props => (
+                    <NotesGrid {...props} user={this.state.user} />
+                  )}
+                />
+                <Redirect exact from="/" to="/Home" />
               </Switch>
-              <p>hello</p>
             </main>
           </Slide>
         </React.Fragment>

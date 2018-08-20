@@ -33,7 +33,7 @@ class SideMenu extends Component {
       <React.Fragment>
         <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
           <div className={classes.toolbar} />
-          <Link to="/home" style={{ textDecoration: "none" }}>
+          <Link  to="/home" style={{ textDecoration: "none" }}>
             <ListItem button>
               <ListItemIcon>
                 <Home />

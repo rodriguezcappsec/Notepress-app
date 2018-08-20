@@ -59,7 +59,6 @@ class HomeAuth extends Component {
         loggedUser.user = user.data;
         loggedUser.isLogged = true;
         this.setState({ loggedUser });
-        console.log(user.data);
       })
       .catch(exe => {
         console.log(exe);
@@ -167,7 +166,10 @@ class HomeAuth extends Component {
     return (
       <React.Fragment>
         <BrowserRouter>
-          <App isLoggedIn={this.state.loggedUser.isLogged} />
+          <App
+            isLoggedIn={this.state.loggedUser.isLogged}
+            loggedUser={this.state.loggedUser.user}
+          />
         </BrowserRouter>
         <ModalAlert
           open={true}
