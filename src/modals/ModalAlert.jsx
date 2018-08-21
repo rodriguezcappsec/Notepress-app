@@ -27,9 +27,8 @@ class ModalAlert extends Component {
       />
     );
   };
-  handleClose = () => {
-    this.setState({ openModal: false });
-  };
+  handleClose = () => this.setState({ openModal: false });
+
   render() {
     return (
       <React.Fragment>
