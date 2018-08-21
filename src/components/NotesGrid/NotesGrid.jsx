@@ -69,7 +69,7 @@ class NotesGrid extends Component {
       .then(notes => {
         // console.log(this.state.user._id);
         let userNotes = notes.data.notes.filter(
-          n => n._id === this.state.user._id
+          n => n.userID === this.state.user._id
         );
         console.log(userNotes);
         this.setState({ allNotes: userNotes });
@@ -125,6 +125,12 @@ class NotesGrid extends Component {
     this.setState({ formEdit: setId });
   };
   onCloseModal = () => this.setState({ openEditModal: false });
+  handleFormValues = ({ currentTarget: input }) => {
+    const account = { ...this.state.account };
+    //setting state account fields when user types email and password
+    account[input.name] = input.value;
+    this.setState({ account: account });
+  };
   Transition = props => {
     return <Slide direction="up" {...props} />;
   };
@@ -245,7 +251,7 @@ class NotesGrid extends Component {
   };
   renderNotes = () => {
     return this.state.allNotes.length === 0 ? (
-      <h3>No data to display</h3>
+      <span>No notes to display</span>
     ) : (
       this.state.allNotes.map((note, index) => (
         <Card
