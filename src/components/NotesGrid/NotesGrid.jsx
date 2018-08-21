@@ -80,7 +80,7 @@ class NotesGrid extends Component {
       }
     })
       .then(deletedNote => {
-        console.log(deletedNote.data);
+        //call modalAlert
       })
       .catch(exe => {
         console.log(exe);
@@ -118,7 +118,6 @@ class NotesGrid extends Component {
     let setId = Object.assign({}, this.state.formEdit);
     setId.id = e.currentTarget.id;
     this.setState({ formEdit: setId });
-    console.log(this.state.formEdit.id);
   };
   onCloseModal = () => this.setState({ openEditModal: false });
   Transition = props => {
@@ -154,7 +153,6 @@ class NotesGrid extends Component {
     let formValues = { ...this.state.formEdit };
     formValues[input.name] = input.value;
     this.setState({ formEdit: formValues });
-    console.log(formValues);
   };
 
   editNoteModal = () => {
@@ -241,10 +239,9 @@ class NotesGrid extends Component {
     return formatted[0];
   };
   renderNotes = () => {
-    return this.state.allNotes.length === 0 ? (
-      <h3>No data to display</h3>
-    ) : (
-      this.state.allNotes.map((note, index) => (
+    return this.state.allNotes.length === 0 ? <h3>
+        No data to display
+      </h3> : this.state.allNotes.map((note, index) => (
         <Card
           className={this.props.classes.card}
           key={index}
@@ -260,7 +257,8 @@ class NotesGrid extends Component {
               variant="subheading"
               component="span"
             >
-              {this.reformatDateHelper(note.createdAt)}
+              created: {this.reformatDateHelper(note.createdAt)} <br />
+              updated: {this.reformatDateHelper(note.updatedAt)}
             </Typography>
             <Typography component="p">{note.note}</Typography>
           </CardContent>
@@ -287,8 +285,7 @@ class NotesGrid extends Component {
             </Button>
           </CardActions>
         </Card>
-      ))
-    );
+      ));
   };
 }
 NotesGrid.propTypes = {
