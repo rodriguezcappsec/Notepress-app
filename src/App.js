@@ -6,7 +6,7 @@ import { withStyles } from "@material-ui/core/styles";
 import SideMenu from "./components/SideMenu/SideMenu.jsx";
 import Slide from "@material-ui/core/Slide";
 import NotesGrid from "./components/NotesGrid/NotesGrid.jsx";
-
+import CreateNote from "./components/CreateNote/CreateNote.jsx";
 const styles = theme => ({
   root: {
     flexGrow: 1,
@@ -29,7 +29,7 @@ class App extends Component {
     this.state = {
       isLoggedIn: this.props.isLoggedIn,
       checked: true,
-      allNotes: [],
+      // allNotes: [],
       user: this.props.loggedUser
     };
   }
@@ -64,6 +64,13 @@ class App extends Component {
                   path="/home"
                   render={props => (
                     <NotesGrid {...props} user={this.state.user} />
+                  )}
+                />
+                <Route
+                  exact
+                  path="/create-note"
+                  render={props => (
+                    <CreateNote {...props} open={true} user={this.state.user} />
                   )}
                 />
                 <Redirect exact from="/" to="/Home" />

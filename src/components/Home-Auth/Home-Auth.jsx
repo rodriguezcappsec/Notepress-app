@@ -16,6 +16,13 @@ import App from "../../App.js";
 import { BrowserRouter } from "react-router-dom";
 import Slide from "@material-ui/core/Slide";
 import ModalAlert from "../../modals/ModalAlert.jsx";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import UserName from "@material-ui/icons/Face";
+
 const styles = theme => ({
   margin: {
     margin: theme.spacing.unit
@@ -43,9 +50,18 @@ class HomeAuth extends Component {
       account: {
         email: "",
         password: ""
-      }
+      },
+      newAccount: {
+        name: "",
+        email: "",
+        password: "",
+        password_confirmation: ""
+      },
+      //field to open register modal
+      openRegisterModal: false
     };
   }
+  //Login request on formSubmit
   loginRequest = onSubmit => {
     onSubmit.preventDefault();
     Axios.post(`${this.state.api}/sign-in`, {
@@ -64,11 +80,18 @@ class HomeAuth extends Component {
         console.log(exe);
       });
   };
+  //getting login fields
   handleFormValues = ({ currentTarget: input }) => {
     const account = { ...this.state.account };
+    //setting state account fields when user types email and password
     account[input.name] = input.value;
     this.setState({ account: account });
   };
+  //opening register modal on register button click
+  handleOpenRegisterModal = () => {
+    this.setState({ openRegisterModal: true });
+  };
+  //function that renders the notes dashboard if user logges in
   handleAuthenticationState = () => {
     if (!this.state.loggedUser.isLogged) {
       const { classes } = this.props;
@@ -124,7 +147,7 @@ class HomeAuth extends Component {
                     <TextField
                       autoFocus
                       type="password"
-                      id="input-with-icon-grid"
+                      id="login-password"
                       label="Password"
                       name="password"
                       onChange={this.handleFormValues}
@@ -151,6 +174,7 @@ class HomeAuth extends Component {
                         style={{ float: "right" }}
                         variant="contained"
                         color="secondary"
+                        onClick={this.handleOpenRegisterModal}
                       >
                         Register
                       </Button>
@@ -160,9 +184,12 @@ class HomeAuth extends Component {
               </form>
             </Card>
           </Slide>
+          {/*Show Register User Modal on register button click*/}
+          {this.registerUserModal()}
         </div>
       );
     }
+    //Render dashboard when the user authenticates
     return (
       <React.Fragment>
         <BrowserRouter>
@@ -180,9 +207,170 @@ class HomeAuth extends Component {
       </React.Fragment>
     );
   };
+  //Rendering
   render() {
     return this.handleAuthenticationState();
   }
+  //Register request on register form modal submit
+  registerRequest = onSubmit => {
+    onSubmit.preventDefault();
+    Axios.post(`${this.state.api}/sign-up`, {
+      credentials: {
+        name: this.state.newAccount.name,
+        email: this.state.newAccount.email,
+        password: this.state.newAccount.password,
+        password_confirmation: this.state.newAccount.password_confirmation
+      }
+    })
+      .then(registeredUser => {
+        // const loggedUser = { ...this.state.loggedUser };
+        // loggedUser.user = user.data;
+        // loggedUser.isLogged = true;
+        // this.setState({ loggedUser });
+        console.log(registeredUser.data);
+      })
+      .catch(exe => {
+        console.log(exe);
+      });
+  };
+  //set openRegisterModal to false when modals closes.
+  onCloseModal = () => this.setState({ openRegisterModal: false });
+  Transition = props => {
+    return <Slide direction="up" {...props} />;
+  };
+  //setting fields types in the register user modal
+  handleRegisterUser = ({ currentTarget: input }) => {
+    let formValues = { ...this.state.newAccount };
+    formValues[input.name] = input.value;
+    this.setState({ newAccount: formValues });
+    console.log(formValues);
+  };
+  //Register new user modal
+  registerUserModal = () => {
+    return (
+      <div>
+        <Dialog
+          open={this.state.openRegisterModal}
+          onClose={this.onCloseModal}
+          aria-labelledby="form-dialog-title"
+          TransitionComponent={this.Transition}
+          style={{ height: "600px" }}
+        >
+          <DialogTitle id="form-dialog-title">Register</DialogTitle>
+          <form onSubmit={this.registerRequest}>
+            <DialogContent>
+              <DialogContentText>
+                Fill the required fields to register
+              </DialogContentText>
+              <Grid
+                container
+                spacing={8}
+                alignItems="flex-end"
+                justify="center"
+                style={{ padding: "5px" }}
+              >
+                <Grid item>
+                  <UserName color="primary" />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="name"
+                    label="UserName"
+                    type="text"
+                    name="name"
+                    fullWidth
+                    onChange={this.handleRegisterUser}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={8}
+                alignItems="flex-end"
+                justify="center"
+                style={{ padding: "5px" }}
+              >
+                <Grid item>
+                  <Email color="primary" />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="email"
+                    label="Email"
+                    name="email"
+                    type="email"
+                    onChange={this.handleRegisterUser}
+                    fullWidth
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={8}
+                alignItems="flex-end"
+                justify="center"
+                style={{ padding: "5px" }}
+              >
+                <Grid item>
+                  <Password color="primary" />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="password"
+                    label="Password"
+                    type="password"
+                    name="password"
+                    fullWidth
+                    onChange={this.handleRegisterUser}
+                  />
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                spacing={8}
+                alignItems="flex-end"
+                justify="center"
+                style={{ padding: "5px" }}
+              >
+                <Grid item>
+                  <Password color="primary" />
+                </Grid>
+                <Grid item>
+                  <TextField
+                    autoFocus
+                    margin="dense"
+                    id="password_confirmation"
+                    label="Password Confirmation"
+                    type="password"
+                    name="password_confirmation"
+                    fullWidth
+                    onChange={this.handleRegisterUser}
+                  />
+                </Grid>
+              </Grid>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                type="submit"
+                variant="contained"
+                size="small"
+                color="primary"
+                // onClick={this.setId}
+              >
+                Submit
+              </Button>
+            </DialogActions>
+          </form>
+        </Dialog>
+      </div>
+    );
+  };
 }
 
 HomeAuth.propTypes = {
