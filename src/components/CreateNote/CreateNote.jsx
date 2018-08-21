@@ -11,32 +11,39 @@ import Grid from "@material-ui/core/Grid";
 import Axios from "axios";
 import Title from "@material-ui/icons/Title";
 import Note from "@material-ui/icons/TextFields";
+import { withRouter } from "react-router-dom";
 
 class CreateNote extends Component {
   constructor(props) {
     super(props);
     this.state = {
       createNoteModal: this.props.open,
+      user: this.props.user.user,
       newNote: {
         title: "",
         note: ""
       }
     };
   }
-  onCloseModal = () => this.setState({ openEditModal: false });
+
   createNoteRequest = onSubmit => {
     onSubmit.preventDefault();
-    Axios.post(`${this.state.api}/sign-in`, {
-      credentials: {
-        email: this.state.account.email,
-        password: this.state.account.password
+    Axios.post(
+      `${this.state.api}/notes`,
+      {
+        note: {
+          title: this.state.newNote.title,
+          note: this.state.newNote.note
+        }
+      },
+      {
+        headers: {
+          Authorization: "Bearer " + this.state.user.token
+        }
       }
-    })
+    )
       .then(user => {
-        const loggedUser = { ...this.state.loggedUser };
-        loggedUser.user = user.data;
-        loggedUser.isLogged = true;
-        this.setState({ loggedUser });
+        this.props.history.push("/home");
       })
       .catch(exe => {
         console.log(exe);
@@ -45,12 +52,14 @@ class CreateNote extends Component {
   Transition = props => {
     return <Slide direction="up" {...props} />;
   };
+  onCloseModal = () => this.setState({ createNoteModal: false });
   handleFormValues = ({ currentTarget: input }) => {
     const newNote = { ...this.state.newNote };
     //setting state account fields when user types email and password
     newNote[input.name] = input.value;
     this.setState({ newNote: newNote });
   };
+  //create new note modal
   createNoteModal = () => {
     return (
       <div>
@@ -129,8 +138,9 @@ class CreateNote extends Component {
       </div>
     );
   };
+
   render() {
-    return <div />;
+    return this.createNoteModal();
   }
 }
-export default CreateNote;
+export default withRouter(CreateNote);
