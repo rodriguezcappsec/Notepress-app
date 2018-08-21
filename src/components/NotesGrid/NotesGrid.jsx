@@ -67,7 +67,12 @@ class NotesGrid extends Component {
       }
     })
       .then(notes => {
-        this.setState({ allNotes: notes.data.notes });
+        // console.log(this.state.user._id);
+        let userNotes = notes.data.notes.filter(
+          n => n._id === this.state.user._id
+        );
+        console.log(userNotes);
+        this.setState({ allNotes: userNotes });
       })
       .catch(exe => {
         console.log(exe);
@@ -239,9 +244,10 @@ class NotesGrid extends Component {
     return formatted[0];
   };
   renderNotes = () => {
-    return this.state.allNotes.length === 0 ? <h3>
-        No data to display
-      </h3> : this.state.allNotes.map((note, index) => (
+    return this.state.allNotes.length === 0 ? (
+      <h3>No data to display</h3>
+    ) : (
+      this.state.allNotes.map((note, index) => (
         <Card
           className={this.props.classes.card}
           key={index}
@@ -285,7 +291,8 @@ class NotesGrid extends Component {
             </Button>
           </CardActions>
         </Card>
-      ));
+      ))
+    );
   };
 }
 NotesGrid.propTypes = {
