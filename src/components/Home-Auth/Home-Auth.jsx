@@ -62,7 +62,10 @@ class HomeAuth extends Component {
       //field to open register modal
       openRegisterModal: false,
       validationError: {},
-      openAlert: ""
+      openAlert: "",
+      openAlertNewUser: "",
+      validationNewUser: {},
+      registeredUserValidated: ""
     };
   }
   //Login request on formSubmit
@@ -247,6 +250,7 @@ class HomeAuth extends Component {
   //Register request on register form modal submit
   registerRequest = onSubmit => {
     onSubmit.preventDefault();
+    this.validateRegisterForm();
     Axios.post(`${this.state.api}/sign-up`, {
       credentials: {
         name: this.state.newAccount.name,
@@ -256,17 +260,17 @@ class HomeAuth extends Component {
       }
     })
       .then(registeredUser => {
-        // const loggedUser = { ...this.state.loggedUser };
-        // loggedUser.user = user.data;
-        // loggedUser.isLogged = true;
-        // this.setState({ loggedUser });
+        this.setState({ openAlertNewUser: false });
+        this.setState({ registeredUserValidated: true });
       })
       .catch(exe => {
         console.log(exe);
       });
   };
   //set openRegisterModal to false when modals closes.
-  onCloseModal = () => this.setState({ openRegisterModal: false });
+  onCloseModal = () => {
+    this.setState({ openRegisterModal: false });
+  };
   Transition = props => {
     return <Slide direction="up" {...props} />;
   };
@@ -275,6 +279,32 @@ class HomeAuth extends Component {
     let formValues = { ...this.state.newAccount };
     formValues[input.name] = input.value;
     this.setState({ newAccount: formValues });
+  };
+  validateRegisterForm = () => {
+    const { newAccount, validationNewUser } = this.state;
+    if (newAccount.name === "") {
+      validationNewUser.message = "Error";
+      this.setState({ openAlertNewUser: true });
+      this.setState({ registeredUserValidated: false });
+    }
+    if (newAccount.email === "") {
+      validationNewUser.message = "Error";
+      this.setState({ openAlertNewUser: true });
+      this.setState({ registeredUserValidated: false });
+    }
+    if (newAccount.password === "") {
+      validationNewUser.message = "Error";
+      this.setState({ openAlertNewUser: true });
+      this.setState({ registeredUserValidated: false });
+    }
+    if (newAccount.password_confirmation === "") {
+      validationNewUser.message = "Error";
+      this.setState({ openAlertNewUser: true });
+      this.setState({ registeredUserValidated: false });
+    }
+    return Object.keys(validationNewUser).length === 0
+      ? ("", this.setState({ openAlertNewUser: false }))
+      : validationNewUser;
   };
   //Register new user modal
   registerUserModal = () => {
@@ -290,9 +320,16 @@ class HomeAuth extends Component {
           <DialogTitle id="form-dialog-title">Register</DialogTitle>
           <form onSubmit={this.registerRequest}>
             <DialogContent>
-              <DialogContentText>
-                Fill the required fields to register
-              </DialogContentText>
+              {this.state.openAlertNewUser && (
+                <Typography variant="subheading" color="secondary">
+                  Wrong fields, please try again!
+                </Typography>
+              )}
+              {this.state.registeredUserValidated && (
+                <Typography variant="subheading" color="primary">
+                  You can log in with your new account now!
+                </Typography>
+              )}
               <Grid
                 container
                 spacing={8}

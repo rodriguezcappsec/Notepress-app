@@ -9,7 +9,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import NoteAdd from "@material-ui/icons/NoteAdd";
 import Home from "@material-ui/icons/Home";
-import List from "@material-ui/icons/List";
+// import List from "@material-ui/icons/List";
 const styles = theme => ({
   appBar: {
     zIndex: theme.zIndex.drawer + 1
@@ -33,7 +33,7 @@ class SideMenu extends Component {
       <React.Fragment>
         <Drawer variant="permanent" classes={{ paper: classes.drawerPaper }}>
           <div className={classes.toolbar} />
-          <Link  to="/home" style={{ textDecoration: "none" }}>
+          <Link to="/home" style={{ textDecoration: "none" }}>
             <ListItem button>
               <ListItemIcon>
                 <Home />
@@ -50,14 +50,14 @@ class SideMenu extends Component {
               <ListItemText primary="Create Note" />
             </ListItem>
           </Link>
-          <Link to="/create-todo" style={{ textDecoration: "none" }}>
+          {/* <Link to="/create-todo" style={{ textDecoration: "none" }}>
             <ListItem button>
               <ListItemIcon>
                 <List />
               </ListItemIcon>
               <ListItemText primary="Add new todo" />
             </ListItem>
-          </Link>
+          </Link> */}
         </Drawer>
       </React.Fragment>
     );
