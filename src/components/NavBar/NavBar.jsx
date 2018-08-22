@@ -13,7 +13,6 @@ import Grid from "@material-ui/core/Grid";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -51,7 +50,11 @@ class NavBar extends Component {
         old: "",
         new: ""
       },
-      user: this.props.user.user
+      user: this.props.user.user,
+      validationError: {},
+      openAlert: "",
+      openAlertSuccess: "",
+      logOut: false
     };
   }
 
@@ -61,6 +64,18 @@ class NavBar extends Component {
 
   handleClose = () => {
     this.setState({ anchorEl: null });
+  };
+  handleLogOut = onSubmit => {
+    onSubmit.preventDefault();
+    Axios.delete(`${apiURL}/sign-out`, {
+      headers: {
+        Authorization: "Token token=" + this.state.user.token
+      }
+    })
+      .then(logout => {
+        window.location.pathname = "";
+      })
+      .catch(exe => {});
   };
   render() {
     const { classes } = this.props;
@@ -105,7 +120,7 @@ class NavBar extends Component {
                   <MenuItem onClick={this.handleChangePassModal}>
                     Change Password
                   </MenuItem>
-                  <MenuItem onClick={this.handleClose}>Log Out</MenuItem>
+                  <MenuItem onClick={this.handleLogOut}>Log Out</MenuItem>
                 </Menu>
               </div>
             )}
@@ -120,12 +135,27 @@ class NavBar extends Component {
   };
   handlecloseChangePassModal = () => {
     this.setState({ openChangePass: false });
+    this.setState({ openAlertSuccess: false });
+  };
+  validateForm = () => {
+    const { newPass, validationError } = this.state;
+    if (newPass.old === "") {
+      this.setState({ openAlert: true });
+      validationError.message = "Error";
+    }
+    if (newPass.new === "") {
+      this.setState({ openAlert: true });
+      validationError.message = "Error";
+    }
+    this.setState({ openWrongLoginAlert: true });
+    return Object.keys(validationError).length === 0
+      ? ("", this.setState({ openAlert: false }))
+      : validationError;
   };
   changePassRequest = onSubmit => {
     onSubmit.preventDefault();
-    console.log(this.state.user);
-
-    Axios.post(
+    this.validateForm();
+    Axios.patch(
       `${apiURL}/change-password`,
       {
         passwords: {
@@ -140,17 +170,18 @@ class NavBar extends Component {
       }
     )
       .then(registeredUser => {
-        console.log(registeredUser.data);
+        this.setState({ openAlert: false });
+        this.setState({ openAlertSuccess: true });
       })
       .catch(exe => {
-        console.log(exe);
+        this.setState({ openAlert: true });
       });
   };
+
   handleFormValues = ({ currentTarget: input }) => {
     const newPass = { ...this.state.newPass };
     //setting state account fields when user types email and password
     newPass[input.name] = input.value;
-    console.log(newPass);
     this.setState({ newPass: newPass });
   };
   changePassModal = () => {
@@ -166,9 +197,20 @@ class NavBar extends Component {
           <DialogTitle id="form-dialog-title">Change Password</DialogTitle>
           <form onSubmit={this.changePassRequest}>
             <DialogContent>
-              <DialogContentText>
-                Fill the required fields to register
-              </DialogContentText>
+              {this.state.openAlert && (
+                // <DialogContentText variant="subheading" color="secondary">
+                <Typography variant="subheading" color="secondary">
+                  Wrong fields, please try again!
+                </Typography>
+                // </DialogContentText>
+              )}
+              {this.state.openAlertSuccess && (
+                // <DialogContentText variant="subheading" color="secondary">
+                <Typography variant="subheading" color="primary">
+                  Password changed!, can close modal or change password again!
+                </Typography>
+                // </DialogContentText>
+              )}
               <Grid
                 container
                 spacing={8}

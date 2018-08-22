@@ -82,7 +82,9 @@ class HomeAuth extends Component {
         this.setState({ loggedUser });
         this.setState({ openAlert: false });
       })
-      .catch(exe => {});
+      .catch(exe => {
+        this.setState({ openAlert: true });
+      });
   };
   validateForm = () => {
     const { account, validationError } = this.state;
@@ -258,7 +260,6 @@ class HomeAuth extends Component {
         // loggedUser.user = user.data;
         // loggedUser.isLogged = true;
         // this.setState({ loggedUser });
-        console.log(registeredUser.data);
       })
       .catch(exe => {
         console.log(exe);
@@ -274,7 +275,6 @@ class HomeAuth extends Component {
     let formValues = { ...this.state.newAccount };
     formValues[input.name] = input.value;
     this.setState({ newAccount: formValues });
-    console.log(formValues);
   };
   //Register new user modal
   registerUserModal = () => {

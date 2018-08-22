@@ -52,7 +52,6 @@ class CreateNote extends Component {
   createNoteRequest = onSubmit => {
     onSubmit.preventDefault();
     this.validateForm();
-    console.log(this.state.validationError);
     Axios.post(
       `${apiURL}/notes`,
       {
