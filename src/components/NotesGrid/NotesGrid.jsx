@@ -71,13 +71,15 @@ class NotesGrid extends Component {
         let userNotes = notes.data.notes.filter(
           n => n.userID === this.state.user._id
         );
-        console.log(userNotes);
         this.setState({ allNotes: userNotes });
       })
       .catch(exe => {
         console.log(exe);
       });
   };
+  componentWillUnmount() {
+    this.handleNoteRequest();
+  }
   handleDeleteNote = ({ currentTarget }) => {
     Axios.delete(`${this.state.api}/notes/${currentTarget.id}`, {
       headers: {
@@ -150,9 +152,7 @@ class NotesGrid extends Component {
         }
       }
     )
-      .then(editedNote => {
-        console.log(editedNote.data);
-      })
+      .then(editedNote => {})
       .catch(err => {
         console.log(err);
       });

@@ -29,7 +29,6 @@ class App extends Component {
     this.state = {
       isLoggedIn: this.props.isLoggedIn,
       checked: true,
-      // allNotes: [],
       user: this.props.loggedUser
     };
   }
@@ -39,7 +38,7 @@ class App extends Component {
     return (
       <div className={classes.root}>
         <React.Fragment>
-          <NavBar isLogged={this.state.isLoggedIn} />
+          <NavBar user={this.state.user} isLogged={this.state.isLoggedIn} />
           <Slide
             direction="right"
             mountOnEnter
