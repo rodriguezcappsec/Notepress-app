@@ -77,7 +77,9 @@ class NotesGrid extends Component {
         console.log(exe);
       });
   };
-
+  componentWillUnmount(){
+    this.handleNoteRequest()
+  }
   handleDeleteNote = ({ currentTarget }) => {
     Axios.delete(`${this.state.api}/notes/${currentTarget.id}`, {
       headers: {

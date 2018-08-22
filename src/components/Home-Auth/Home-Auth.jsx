@@ -22,6 +22,8 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import UserName from "@material-ui/icons/Face";
+import Typography from "@material-ui/core/Typography";
+import { CardContent } from "@material-ui/core";
 
 const styles = theme => ({
   margin: {
@@ -58,12 +60,15 @@ class HomeAuth extends Component {
         password_confirmation: ""
       },
       //field to open register modal
-      openRegisterModal: false
+      openRegisterModal: false,
+      validationError: {},
+      openAlert: ""
     };
   }
   //Login request on formSubmit
   loginRequest = onSubmit => {
     onSubmit.preventDefault();
+    this.validateForm();
     Axios.post(`${this.state.api}/sign-in`, {
       credentials: {
         email: this.state.account.email,
@@ -75,11 +80,30 @@ class HomeAuth extends Component {
         loggedUser.user = user.data;
         loggedUser.isLogged = true;
         this.setState({ loggedUser });
+        this.setState({ openAlert: false });
       })
-      .catch(exe => {
-        console.log(exe);
-      });
+      .catch(exe => {});
   };
+  validateForm = () => {
+    const { account, validationError } = this.state;
+    if (account.title === "") {
+      validationError.message = "Error";
+      validationError.title = "Title cannot be empty";
+      this.setState({ openAlert: true });
+    }
+    if (account.note === "") {
+      validationError.note = "Note cannot be empty";
+      this.setState({ openAlert: true });
+    }
+    this.setState({ openWrongLoginAlert: true });
+    return Object.keys(validationError).length === 0
+      ? ("", this.setState({ openAlert: false }))
+      : validationError;
+  };
+  // validateLogin=(exe) =>{
+  //    if(exe)
+  // }
+
   //getting login fields
   handleFormValues = ({ currentTarget: input }) => {
     const account = { ...this.state.account };
@@ -98,7 +122,7 @@ class HomeAuth extends Component {
       return (
         <div className={classes.root}>
           <div>
-            <NavBar />
+            <NavBar user={this.state.loggedUser.user} />
           </div>
           <Slide direction="down" in={true} mountOnEnter unmountOnExit>
             <Card
@@ -112,6 +136,13 @@ class HomeAuth extends Component {
               }}
             >
               <CardHeader title="NotePress" subheader="LogIn" />
+              <CardContent>
+                {this.state.openAlert ? (
+                  <Typography variant="subheading" color="secondary">
+                    Wrong fields, please try again!
+                  </Typography>
+                ) : null}
+              </CardContent>
               <form onSubmit={this.loginRequest} id="LoginForm">
                 <Grid
                   container
