@@ -262,14 +262,20 @@ class HomeAuth extends Component {
       .then(registeredUser => {
         this.setState({ openAlertNewUser: false });
         this.setState({ registeredUserValidated: true });
+        this.onCloseModal();
       })
       .catch(exe => {
-        console.log(exe);
+        this.setState({ openAlertNewUser: true });
+        this.setState({ registeredUserValidated: false });
       });
   };
   //set openRegisterModal to false when modals closes.
   onCloseModal = () => {
     this.setState({ openRegisterModal: false });
+
+    setInterval(() => {
+      this.setState({ registeredUserValidated: false });
+    }, 2000);
   };
   Transition = props => {
     return <Slide direction="up" {...props} />;
