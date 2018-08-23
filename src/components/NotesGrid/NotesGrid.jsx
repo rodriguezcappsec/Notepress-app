@@ -85,6 +85,7 @@ class NotesGrid extends Component {
     })
       .then(deletedNote => {
         //call modalAlert
+        this.handleNoteRequest();
       })
       .catch(exe => {
         console.log(exe);
