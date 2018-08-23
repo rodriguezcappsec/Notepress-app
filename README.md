@@ -9,7 +9,7 @@
 
 ### Wireframes
 
--[Login](https://i.imgur.com/G4DIhMW.png)
+-[Login](https://i.imgur.com/qnYESog.jpg)
 
 -[Dashboard](https://i.imgur.com/n9tDQCs.jpg)
 
