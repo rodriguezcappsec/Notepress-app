@@ -16,3 +16,5 @@
 
 ### Challenges creating the front-end
 
+I developed this app using Reactjs. There was a learning curve that I had to tackle but I managed to learn what I needed
+to and create this app. In the next couple of months I will be developing a Code Snippets app and a Content Management System app.
