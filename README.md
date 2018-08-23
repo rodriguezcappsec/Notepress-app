@@ -1,6 +1,6 @@
-## NotePress
+# NotePress
 
-# User Stores
+### User Stores
 
 [User Stories](https://trello.com/b/NWVfKvCU/notepress)
 
