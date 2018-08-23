@@ -239,7 +239,6 @@ class HomeAuth extends Component {
           modalTitle="Welcome!"
           modalContent={this.state.loggedUser.user.user.name}
         />
-        );
       </React.Fragment>
     );
   };
