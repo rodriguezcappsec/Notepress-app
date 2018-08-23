@@ -77,9 +77,6 @@ class NotesGrid extends Component {
         console.log(exe);
       });
   };
-  componentWillUnmount() {
-    this.handleNoteRequest();
-  }
   handleDeleteNote = ({ currentTarget }) => {
     Axios.delete(`${this.state.api}/notes/${currentTarget.id}`, {
       headers: {
@@ -97,10 +94,6 @@ class NotesGrid extends Component {
   componentDidMount() {
     this.handleNoteRequest();
   }
-  componentDidUpdate() {
-    this.handleNoteRequest();
-  }
-
   render() {
     const { classes } = this.props;
 
@@ -152,7 +145,9 @@ class NotesGrid extends Component {
         }
       }
     )
-      .then(editedNote => {})
+      .then(editedNote => {
+        this.handleNoteRequest();
+      })
       .catch(err => {
         console.log(err);
       });
@@ -272,7 +267,14 @@ class NotesGrid extends Component {
               created: {this.reformatDateHelper(note.createdAt)} <br />
               updated: {this.reformatDateHelper(note.updatedAt)}
             </Typography>
-            <Typography component="p">{note.note}</Typography>
+            <div style={{ display: "flex" }}>
+              <Typography
+                component="p"
+                style={{ maxWidth: "300px", flexWrap: "wrap" }}
+              >
+                {note.note}
+              </Typography>
+            </div>
           </CardContent>
           <CardActions>
             <Button
