@@ -5,7 +5,7 @@
 - [User stories and more](https://trello.com/b/NWVfKvCU/notepress)
 
 ### Database Diagram 
-- [ERD](https://i.imgur.com/Qqe2gws.jpg)
+![ERD](https://i.imgur.com/Qqe2gws.jpg)
 
 ### Wireframes
 
