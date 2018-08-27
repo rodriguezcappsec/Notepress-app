@@ -11,7 +11,7 @@
 
 ![Login](https://i.imgur.com/qnYESog.jpg)
 
--[Dashboard](https://i.imgur.com/n9tDQCs.jpg)
+![Dashboard](https://i.imgur.com/n9tDQCs.jpg)
 
 
 ### Challenges creating the front-end
